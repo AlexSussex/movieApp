@@ -7,9 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
-
 import org.apache.log4j.Logger;
-
 import com.qa.persistence.domain.Movie;
 import com.qa.util.JSONUtil;
 
@@ -68,9 +66,17 @@ public class MovieDBRepository implements IMovieRepository {
 		}
 	}
 	
+	@Override
+	@Transactional(Transactional.TxType.REQUIRED)
+	public String updateMovie(String movieJSON) {
+		Movie movieToUpdate = util.getObjectForJSON(movieJSON, Movie.class);
+		if (findMovie(movieToUpdate.getId())!=null) {
+			manager.merge(movieToUpdate);
+		}
+		return "The movie " + movieToUpdate.getTitle() + " has been succesfully updated.";
+	}
+	
 	public Movie findMovie(Long id) {
 		return manager.find(Movie.class, id);
 	}
-
-	
 }
