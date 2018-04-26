@@ -36,7 +36,6 @@ public class MovieDBRepository implements IMovieRepository {
 	public String getAMovie(Long id) {
 		Movie aMovie = getMovie(id);
 		if (aMovie != null) {
-			LOGGER.info(util.getJSONForObject(aMovie));
 			return util.getJSONForObject(aMovie);
 		}
 		else {
@@ -54,6 +53,23 @@ public class MovieDBRepository implements IMovieRepository {
 		Movie aMovie = util.getObjectForJSON(movieJSON, Movie.class);
 		manager.persist(aMovie);
 		return "{\"message\":\"The movie has been added to the database.\"}";
+	}
+
+	@Override
+	@Transactional(Transactional.TxType.REQUIRED)
+	public String deleteMovie(Long id) {
+		Movie movieToSearch = findMovie(id);
+		if (movieToSearch !=null) {
+			manager.remove(movieToSearch);
+			return "{\"message\":\"The movie has been deleted from the database.\"}";
+		}
+		else {
+			return "{\"message\":\"The movie entered does not exist in the database.\"}";
+		}
+	}
+	
+	public Movie findMovie(Long id) {
+		return manager.find(Movie.class, id);
 	}
 
 	
