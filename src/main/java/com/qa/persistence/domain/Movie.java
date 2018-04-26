@@ -3,6 +3,7 @@ package com.qa.persistence.domain;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Movie {
@@ -10,8 +11,11 @@ public class Movie {
 	@Id 
 	@GeneratedValue
 	private Long id;
+	@NotNull
 	private String title;
+	@NotNull
 	private String genre;
+	@NotNull
 	private String rating;
 
 	public Movie() {
